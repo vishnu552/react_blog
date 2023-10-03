@@ -2,10 +2,10 @@ import { useState } from "react";
 import reactLogo from "./assets/react.svg";
 import viteLogo from "/vite.svg";
 import "./App.css";
-import conf from "./config/config";
+import conf from "./config/conf";
 
 function App() {
-  console.log("from comfig", conf.appWriteUrl);
+  console.log("from config", conf.appWriteUrl);
   return (
     <>
       <p className="read-the-docs">
