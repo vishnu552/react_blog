@@ -1,18 +1,37 @@
-import { useState } from "react";
-import reactLogo from "./assets/react.svg";
-import viteLogo from "/vite.svg";
+import { useState, useEffect } from "react";
 import "./App.css";
-import conf from "./config/conf";
+import authService from "./appwrite/auth";
+import { useDispatch } from "react-redux";
+import { logIn, logOut } from "./store/authSlice";
+import Header from "./component/header/Header";
+import Footer from "./component/footer/Footer";
+import { Outlet } from "react-router-dom";
 
 function App() {
-  console.log("from config", conf.appWriteUrl);
-  return (
-    <>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  );
+  const [loading, setLoading] = useState(true);
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    authService
+      .getCurrentUser()
+      .then((userData) => {
+        if (userData) {
+          dispatch(logIn(userData));
+        } else {
+          dispatch(logOut());
+        }
+      })
+      .finally(setLoading(false));
+  }, []);
+  return !loading ? (
+    <div className="flex flex-wrap min-h-screen bg-gray-400 content-between ">
+      <div className="w-full block">
+        <Header />
+        <main>{/* <Outlet/> */}</main>
+        <Footer />
+      </div>
+    </div>
+  ) : null;
 }
 
 export default App;
